@@ -29,5 +29,5 @@ transformers>=4.33.0
 encodec>=0.1.1
 # deps for XTTS
 num2words
-spacy[ja]>=3
+spacy
 
