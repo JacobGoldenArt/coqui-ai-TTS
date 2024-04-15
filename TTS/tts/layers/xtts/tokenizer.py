@@ -113,9 +113,8 @@ def expand_symbols_multilingual(text, lang="en"):
     return text.strip()
 
 
-_ordinal_re = {
-    "en": re.compile(r"([0-9]+)(st|nd|rd|th)")
-    
+_ordinal_re = {"en": re.compile(r"([0-9]+)(st|nd|rd|th)")}
+
 _number_re = re.compile(r"[0-9]+")
 _currency_re = {
     "USD": re.compile(r"((\$[0-9\.\,]*[0-9]+)|([0-9\.\,]*[0-9]+\$))"),
@@ -149,11 +148,11 @@ def _expand_decimal_point(m, lang="en"):
 
 def _expand_currency(m, lang="en", currency="USD"):
     amount = float((re.sub(r"[^\d.]", "", m.group(0).replace(",", "."))))
-    full_amount = num2words(amount, to="currency", currency=currency, lang=lang if lang != "cs" else "cz")
+    full_amount = num2words(
+        amount, to="currency", currency=currency, lang=lang if lang != "cs" else "cz"
+    )
 
-    and_equivalents = {
-        "en": ", "
-    }
+    and_equivalents = {"en": ", "}
 
     if amount.is_integer():
         last_and = full_amount.rfind(and_equivalents[lang])
@@ -172,20 +171,28 @@ def _expand_number(m, lang="en"):
 
 
 def expand_numbers_multilingual(text, lang="en"):
-        if lang in ["en"]:
-            text = re.sub(_comma_number_re, _remove_commas, text)
-        else:
-            text = re.sub(_dot_number_re, _remove_dots, text)
-        try:
-            text = re.sub(_currency_re["GBP"], lambda m: _expand_currency(m, lang, "GBP"), text)
-            text = re.sub(_currency_re["USD"], lambda m: _expand_currency(m, lang, "USD"), text)
-            text = re.sub(_currency_re["EUR"], lambda m: _expand_currency(m, lang, "EUR"), text)
-        except:
-            pass
-        if lang != "tr":
-            text = re.sub(_decimal_number_re, lambda m: _expand_decimal_point(m, lang), text)
-        text = re.sub(_ordinal_re[lang], lambda m: _expand_ordinal(m, lang), text)
-        text = re.sub(_number_re, lambda m: _expand_number(m, lang), text)
+    if lang in ["en"]:
+        text = re.sub(_comma_number_re, _remove_commas, text)
+    else:
+        text = re.sub(_dot_number_re, _remove_dots, text)
+    try:
+        text = re.sub(
+            _currency_re["GBP"], lambda m: _expand_currency(m, lang, "GBP"), text
+        )
+        text = re.sub(
+            _currency_re["USD"], lambda m: _expand_currency(m, lang, "USD"), text
+        )
+        text = re.sub(
+            _currency_re["EUR"], lambda m: _expand_currency(m, lang, "EUR"), text
+        )
+    except:
+        pass
+    if lang != "tr":
+        text = re.sub(
+            _decimal_number_re, lambda m: _expand_decimal_point(m, lang), text
+        )
+    text = re.sub(_ordinal_re[lang], lambda m: _expand_ordinal(m, lang), text)
+    text = re.sub(_number_re, lambda m: _expand_number(m, lang), text)
     return text
 
 
@@ -214,10 +221,9 @@ def basic_cleaners(text):
     return text
 
 
-
-
-
-DEFAULT_VOCAB_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../data/tokenizer.json")
+DEFAULT_VOCAB_FILE = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)), "../data/tokenizer.json"
+)
 
 
 class VoiceBpeTokenizer:
@@ -225,10 +231,7 @@ class VoiceBpeTokenizer:
         self.tokenizer = None
         if vocab_file is not None:
             self.tokenizer = Tokenizer.from_file(vocab_file)
-        self.char_limits = {
-            "en": 250
-        }
-
+        self.char_limits = {"en": 250}
 
     def check_input_length(self, txt, lang):
         lang = lang.split("-")[0]  # remove the region
@@ -277,9 +280,12 @@ def test_expand_numbers_multilingual():
         ("This is a 1st test", "This is a first test", "en"),
         ("That will be $20 sir.", "That will be twenty dollars sir.", "en"),
         ("That will be 20€ sir.", "That will be twenty euro sir.", "en"),
-        ("That will be 20.15€ sir.", "That will be twenty euro, fifteen cents sir.", "en"),
+        (
+            "That will be 20.15€ sir.",
+            "That will be twenty euro, fifteen cents sir.",
+            "en",
+        ),
         ("That's 100,000.5.", "That's one hundred thousand point five.", "en"),
-
     ]
     for a, b, lang in test_cases:
         out = expand_numbers_multilingual(a, lang=lang)
@@ -291,7 +297,6 @@ def test_abbreviations_multilingual():
         # English
         ("Hello Mr. Smith.", "Hello mister Smith.", "en"),
         ("Dr. Jones is here.", "doctor Jones is here.", "en"),
-       
     ]
 
     for a, b, lang in test_cases:
