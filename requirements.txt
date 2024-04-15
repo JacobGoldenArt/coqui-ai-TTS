@@ -22,20 +22,6 @@ matplotlib>=3.7.0
 trainer>=0.0.36
 # config management
 coqpit>=0.0.16
-# chinese g2p deps
-jieba
-pypinyin
-# korean
-hangul_romanize
-# gruut+supported langs
-gruut[de,es,fr]==2.2.3
-# deps for korean
-jamo
-g2pkk>=0.1.1
-# deps for bangla
-bangla
-bnnumerizer
-bnunicodenormalizer
 #deps for tortoise
 einops>=0.6.0
 transformers>=4.33.0
@@ -44,3 +30,4 @@ encodec>=0.1.1
 # deps for XTTS
 num2words
 spacy[ja]>=3
+
