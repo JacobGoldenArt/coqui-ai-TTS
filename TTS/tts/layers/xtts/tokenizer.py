@@ -14,8 +14,8 @@ logger = logging.getLogger(__name__)
 
 def get_spacy_lang(lang):
     """Return Spacy language used for sentence splitting."""
-        # For most languages, English does the job
-        return English()
+    # For most languages, English does the job
+    return English()
 
 
 def split_sentence(text, lang, text_split_length=250):
