@@ -261,7 +261,8 @@
                     "license": "bsd-3-clause"
                 }
             }
-        },
+        }
+    },
 
     "vocoder_models": {
         "universal": {
@@ -357,7 +358,8 @@
                     "contact": ""
                 }
             }
-        },
+        }
+    },
 
     "voice_conversion_models": {
         "multilingual": {
